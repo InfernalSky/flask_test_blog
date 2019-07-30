@@ -2,26 +2,43 @@
 
 {% block title %}
 
-	Blueprint index page
+    Blueprint index page
 
 {% endblock %}
 
 {% block content_title %}
 
-	Posts
+    Posts
 
 {% endblock %}
 
 {% block content %}
 
-	{% for post in posts %}
-		
-		<p>
-			
-			<a href="{{ url_for('posts.post_detail', slug=post.slug)}}">{{ post.title }}</a>
+    {% for post in pages.items %}
+        
+        <p>
+            
+            <a href="{{ url_for('posts.post_detail', slug=post.slug)}}">{{ post.title }}</a>
 
-		</p>
+        </p>
 
-	{% endfor %}
+    {% endfor %}
+
+    <nav>
+    <ul class="pagination">
+        <li {% if not pages.has_prev %} class="page-item disabled" {% endif %}>
+            <a class="page-link" href="./?page={{pages.prev_num}}">Previous</a>
+        </li>
+
+        {% for page in pages.iter_pages()%}
+        <li {% if page == pages.page %} class="page-item" {% endif %}> 
+            <a class="page-link" href="./?page={{page}}">{{page}}</a>
+        </li>
+        {% endfor %}
+        <li {% if not pages.has_next %} class="page-item disabled" {% endif %}>
+            <a class="page-link" href="./?page={{ pages.next_num }}{% if search %}&search={{ search }}{% endif %}">Next</a>
+        </li>
+    </ul>
+    </nav>
 
 {% endblock %}
